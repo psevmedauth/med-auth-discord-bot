@@ -1,3 +1,5 @@
+raise Exception("TEST")
+
 import requests
 import os
 
