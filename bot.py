@@ -1,16 +1,16 @@
 import requests
 from bs4 import BeautifulSoup
-import os
 
 url = "https://www.med.auth.gr/tags/enimerosi-proptyhiakon"
 
-headers = {
-    "User-Agent": "Mozilla/5.0"
-}
-
-r = requests.get(url, headers=headers)
+r = requests.get(
+    url,
+    headers={"User-Agent": "Mozilla/5.0"}
+)
 
 soup = BeautifulSoup(r.text, "html.parser")
+
+count = 0
 
 for a in soup.find_all("a", href=True):
     href = a["href"]
@@ -19,14 +19,11 @@ for a in soup.find_all("a", href=True):
         title = a.get_text(strip=True)
 
         if title:
-            link = "https://www.med.auth.gr" + href
+            print("TITLE:", title)
+            print("URL:", href)
+            print("-----")
 
-            requests.post(
-                os.environ["DISCORD_WEBHOOK"],
-                json={
-                    "content": f"📢 Νέα ανακοίνωση Ιατρικής ΑΠΘ\n\n**{title}**\n{link}"
-                }
-            )
+            count += 1
 
-            print("FOUND:", title)
+        if count == 15:
             break
