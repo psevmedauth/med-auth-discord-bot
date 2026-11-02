@@ -1,10 +1,16 @@
 import requests
 import os
 
+print("START")
+
 r = requests.post(
     os.environ["DISCORD_WEBHOOK"],
-    json={"content": "✅ TEST από GitHub Actions"}
+    json={
+        "content": "✅ TEST από GitHub Actions"
+    }
 )
 
-print("Status code:", r.status_code)
-print("Response:", r.text)
+print("STATUS:", r.status_code)
+print("TEXT:", r.text)
+
+print("END")
