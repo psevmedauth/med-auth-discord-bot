@@ -1,16 +1,22 @@
 import requests
+from bs4 import BeautifulSoup
 import os
 
-print("START")
+URL = "https://www.med.auth.gr/tags/enimerosi-proptyhiakon"
 
-r = requests.post(
-    os.environ["DISCORD_WEBHOOK"],
-    json={
-        "content": "✅ TEST από GitHub Actions"
-    }
-)
+r = requests.get(URL, timeout=30)
 
-print("STATUS:", r.status_code)
-print("TEXT:", r.text)
+soup = BeautifulSoup(r.text, "html.parser")
 
-print("END")
+article = soup.find("a", href=lambda x: x and "/article/" in x)
+
+if article:
+    title = article.get_text(strip=True)
+    link = "https://www.med.auth.gr" + article["href"]
+
+    requests.post(
+        os.environ["DISCORD_WEBHOOK"],
+        json={
+            "content": f"📢 Νέα ανακοίνωση Ιατρικής ΑΠΘ\n\n**{title}**\n{link}"
+        }
+    )
