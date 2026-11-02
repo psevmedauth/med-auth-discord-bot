@@ -10,7 +10,7 @@ r = requests.get(
 
 root = ET.fromstring(r.content)
 
-for item in root.findall("./channel/item")[:20\]:
+for item in root.findall("./channel/item")[:20]:
     title = item.find("title")
     pubdate = item.find("pubDate")
     link = item.find("link")
