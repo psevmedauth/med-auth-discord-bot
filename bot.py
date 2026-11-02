@@ -1,6 +1,5 @@
 import requests
 import xml.etree.ElementTree as ET
-import os
 
 rss_url = "https://www.med.auth.gr/taxonomy/term/1106/feed"
 
@@ -11,17 +10,12 @@ r = requests.get(
 
 root = ET.fromstring(r.content)
 
-item = root.find("./channel/item")
+for item in root.findall("./channel/item")[:20\]:
+    title = item.find("title")
+    pubdate = item.find("pubDate")
+    link = item.find("link")
 
-title = item.find("title").text
-link = item.find("link").text
-
-requests.post(
-    os.environ["DISCORD_WEBHOOK"],
-    json={
-        "content": f"📢 Νέα ανακοίνωση Ιατρικής ΑΠΘ\n\n**{title}**\n{link}"
-    }
-)
-
-print(title)
-print(link)
+    print("TITLE:", title.text if title is not None else "")
+    print("DATE:", pubdate.text if pubdate is not None else "")
+    print("LINK:", link.text if link is not None else "")
+    print("-----")
